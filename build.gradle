@@ -2,15 +2,38 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
 
+ext.junitJupiterVersion = '5.6.0'
+ext.jqwikVersion = '1.2.4'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileTestJava {
+    options.compilerArgs += '-parameters'
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+
+    include '**/*Properties.class'
+    include '**/*Test.class'
+    include '**/*Tests.class'
+}
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation("org.assertj:assertj-core:3.12.2")
+    testImplementation("net.jqwik:jqwik:${jqwikVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+}
+
+wrapper {
+    description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '6.2.2'
 }
