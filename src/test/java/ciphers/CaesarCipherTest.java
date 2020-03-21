@@ -1,4 +1,4 @@
-package caesar;
+package ciphers;
 
 
 import net.jqwik.api.ForAll;

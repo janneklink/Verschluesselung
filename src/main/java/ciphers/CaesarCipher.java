@@ -1,4 +1,4 @@
-package caesar;
+package ciphers;
 
 public class CaesarCipher {
 
@@ -14,7 +14,7 @@ public class CaesarCipher {
         }
     }
 
-    private static char shiftChar(char c, int shift) {
+    public static char shiftChar(char c, int shift) {
         return keepCharachterInLetterRange(c + shift);
     }
 
@@ -32,12 +32,4 @@ public class CaesarCipher {
 
 }
 
-enum charValues {
-    A(97), Z(122);
 
-    int value;
-
-    charValues(int value) {
-        this.value = value;
-    }
-}
