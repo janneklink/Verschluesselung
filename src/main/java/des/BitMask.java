@@ -9,12 +9,18 @@ public enum BitMask {
     LASTTHREEBIT(0b00000111),
     FIRSTBIT(0b10000000),
     FIRSTTOTHREEBIT(0b11100000),
-    FOURTOEIGHTBIT(0b00011111);
+    FOURTOEIGHTBIT(0b00011111),
+    FIRSTTOSIXBIT(0b11111100),
+    SEVENANDEIGHTBIT(0b00000011),
+    FIRSTTOFOURBIT(0b11110000),
+    FIVETOEIGHTBIT(0b00001111),
+    FIRSTANDSECONDBIT(0b11000000),
+    THREETOEIGHTBIT(0b00111111);
 
     byte mask;
 
-    BitMask(int mask){
-        this.mask = (byte)mask;
+    BitMask(int mask) {
+        this.mask = (byte) mask;
     }
 
 }
