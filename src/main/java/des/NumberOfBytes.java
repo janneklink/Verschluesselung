@@ -5,7 +5,7 @@ public enum NumberOfBytes {
     TEXTBLOCK64BIT(8, 1),
     TEXTBLOCK48BIT(6,1),
     TEXTBLOCK32BIT(4, 1),
-    SBLOCK(16, 4);
+    SBOX(16, 4);
 
     int length;
     int width;
