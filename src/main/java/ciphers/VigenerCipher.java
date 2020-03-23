@@ -20,7 +20,7 @@ public class VigenerCipher {
     private static String invertKey(String key) {
         String invertedKey = "";
         for (char keyChar : key.toCharArray()) {
-            invertedKey+=CaesarCipher.shiftChar(keyChar,keyChar-charValues.A.value-1);
+            invertedKey+=CaesarCipher.shiftChar(keyChar,keyChar-26);
         }
         return invertedKey;
     }

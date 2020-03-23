@@ -1,0 +1,20 @@
+package des;
+
+public enum BitMask {
+    FOURTOSEVENBIT(0b00011110),
+    LASTBIT(0b00000001),
+    LEFTBOUNDOFSIX(0b00100000),
+    FIRSTTOFIVEBIT(0b11111000),
+    FOURANDFIVEBIT(0b00011000),
+    LASTTHREEBIT(0b00000111),
+    FIRSTBIT(0b10000000),
+    FIRSTTOTHREEBIT(0b11100000),
+    FOURTOEIGHTBIT(0b00011111);
+
+    byte mask;
+
+    BitMask(int mask){
+        this.mask = (byte)mask;
+    }
+
+}
