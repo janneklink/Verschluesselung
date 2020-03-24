@@ -1,9 +1,7 @@
 package des;
 
-
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 
 public class Function {
@@ -22,7 +20,7 @@ public class Function {
     };
 
 
-    public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, Key key) {
+    public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, SubKey key) {
         Textblock48Bit expandedTextblock = textblock32Bit.expandTo48Bit();
         Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr48ByteArray(expandedTextblock.textblock48, key.key));
 
