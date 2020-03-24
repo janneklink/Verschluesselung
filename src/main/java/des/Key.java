@@ -34,37 +34,56 @@ public class Key extends BitBlock {
     }
 
     private byte[] generateSubKey(LeftKey leftHalfKey, RightKey rightHalfKey) {
-        return new byte[0];
+        byte[] firstHalf = leftHalfKey.getPermutatedHalfKey();
+        byte[] secondHalf = rightHalfKey.getPermutatedHalfKey();
+        byte[] subKey = new byte[6];
+        subKey[0] = firstHalf[0];
+        subKey[1] = firstHalf[1];
+        subKey[2] = firstHalf[2];
+        subKey[3] = secondHalf[0];
+        subKey[4] = secondHalf[1];
+        subKey[5] = secondHalf[2];
+        return subKey;
     }
 
 
 }
 
 class HalfKey extends BitBlock {
-    ArrayList<ArrayList> bitPermutation;
+    ArrayList<ArrayList> keyCreationBitPermutation;
+    ArrayList<ArrayList> keyPermutation;
     byte[] halfKey;
 
-    protected byte getByte(int bytenumber, byte[] key) {
+    protected byte getByte(int bytenumber, byte[] key, ArrayList<ArrayList> permutation) {
         byte result = 0b00000000;
         int numberOfBits = 8;
         if (bytenumber == 3) {
             numberOfBits = 4;
         }
         for (int bit = 0; bit < numberOfBits; bit++) {
-            int bitnumber = (int) bitPermutation.get(bytenumber).get(bit);
+            int bitnumber = (int) permutation.get(bytenumber).get(bit);
             result = (byte) ((result << 1) | getNthBit(key, bitnumber));
         }
         return result;
     }
 
     public byte[] getHalfKey(byte[] key) {
-        byte[] rightHalf = new byte[4];
-        rightHalf[0] = getByte(0, key);
-        rightHalf[1] = getByte(1, key);
-        rightHalf[2] = getByte(2, key);
-        rightHalf[3] = getByte(3, key);
-        return rightHalf;
+        byte[] halfKey = new byte[4];
+        halfKey[0] = getByte(0, key, keyCreationBitPermutation);
+        halfKey[1] = getByte(1, key, keyCreationBitPermutation);
+        halfKey[2] = getByte(2, key, keyCreationBitPermutation);
+        halfKey[3] = getByte(3, key, keyCreationBitPermutation);
+        return halfKey;
     }
+
+    public byte[] getPermutatedHalfKey() {
+        byte[] permutatedHalfKey = new byte[3];
+        permutatedHalfKey[0] = getByte(0, halfKey, keyPermutation);
+        permutatedHalfKey[1] = getByte(1, halfKey, keyPermutation);
+        permutatedHalfKey[2] = getByte(2, halfKey, keyPermutation);
+        return permutatedHalfKey;
+    }
+
 
     public void rotate(int numberOfRotations) {
         for (int rotation = 0; rotation < numberOfRotations; rotation++) {
@@ -73,7 +92,12 @@ class HalfKey extends BitBlock {
     }
 
     protected byte[] getRotatedHalfKey() {
-        return new byte[4];
+        byte[] rotatedKey = new byte[4];
+        rotatedKey[0] = (byte) ((halfKey[0] << 1) | (maskBits(halfKey[1], BitMask.FIRSTBIT) >> 7));
+        rotatedKey[1] = (byte) ((halfKey[1] << 1) | (maskBits(halfKey[2], BitMask.FIRSTBIT) >> 7));
+        rotatedKey[2] = (byte) ((halfKey[2] << 1) | (maskBits(halfKey[3], BitMask.FIFTHBIT) >> 3));
+        rotatedKey[3] = (byte) (maskBits((byte) (halfKey[3] << 1), BitMask.FIVETOEIGHTBIT) | (maskBits(halfKey[0], BitMask.FIRSTBIT) >> 7));
+        return rotatedKey;
     }
 }
 
@@ -82,10 +106,11 @@ class LeftKey extends HalfKey {
     LeftKey(byte[] key) {
         checkSize(key.length, NumberOfBytes.KEY.length);
         this.halfKey = getHalfKey(key);
-        initializeBitPermutation();
+        initializeCreationBitPermutation();
+
     }
 
-    private void initializeBitPermutation() {
+    private void initializeCreationBitPermutation() {
         ArrayList<Integer> byte0 = new ArrayList<>() {
             {
                 Collections.addAll(Arrays.asList(57, 49, 41, 33, 25, 17, 9, 1));
@@ -106,9 +131,32 @@ class LeftKey extends HalfKey {
                 Collections.addAll(Arrays.asList(60, 52, 44, 36));
             }
         };
-        this.bitPermutation = new ArrayList() {
+        this.keyCreationBitPermutation = new ArrayList() {
             {
                 Collections.addAll(Arrays.asList(byte0, byte1, byte2, byte3));
+            }
+        };
+    }
+
+    private void initializeBitPermutation() {
+        ArrayList<Integer> byte0 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(14, 17, 11, 24, 1, 5, 3, 32));
+            }
+        };
+        ArrayList<Integer> byte1 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(15, 6, 21, 10, 23, 19, 12, 4));
+            }
+        };
+        ArrayList<Integer> byte2 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(30, 8, 16, 7, 31, 20, 13, 2));
+            }
+        };
+        this.keyPermutation = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(byte0, byte1, byte2));
             }
         };
     }
@@ -120,10 +168,10 @@ class RightKey extends HalfKey {
     RightKey(byte[] key) {
         checkSize(key.length, NumberOfBytes.KEY.length);
         this.halfKey = getHalfKey(key);
-        initializeBitPermutation();
+        initializeCreationBitPermutation();
     }
 
-    private void initializeBitPermutation() {
+    private void initializeCreationBitPermutation() {
         ArrayList<Integer> byte0 = new ArrayList<>() {
             {
                 Collections.addAll(Arrays.asList(63, 55, 47, 39, 31, 23, 15, 7));
@@ -144,11 +192,33 @@ class RightKey extends HalfKey {
                 Collections.addAll(Arrays.asList(28, 20, 12, 4));
             }
         };
-        this.bitPermutation = new ArrayList() {
+        this.keyCreationBitPermutation = new ArrayList() {
             {
                 Collections.addAll(Arrays.asList(byte0, byte1, byte2, byte3));
             }
         };
     }
 
+    private void initializeBitPermutation() {
+        ArrayList<Integer> byte0 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(13, 24, 3, 9, 19, 31, 2, 12));
+            }
+        };
+        ArrayList<Integer> byte1 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(23, 17, 5, 20, 16, 21, 11, 32));
+            }
+        };
+        ArrayList<Integer> byte2 = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(6, 29, 18, 14, 22, 8, 1, 4));
+            }
+        };
+        this.keyPermutation = new ArrayList<>() {
+            {
+                Collections.addAll(Arrays.asList(byte0, byte1, byte2));
+            }
+        };
+    }
 }
