@@ -43,4 +43,6 @@ public class Textblock32Bit extends BitBlock {
         return new Textblock32Bit(permutatedText);
     }
 
+
+
 }

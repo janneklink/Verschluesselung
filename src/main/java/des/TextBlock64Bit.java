@@ -59,4 +59,17 @@ public class TextBlock64Bit extends BitBlock {
         finalPermutation = List.of(byte0, byte1, byte2, byte3, byte4, byte5, byte6, byte7);
     }
 
+    public static TextBlock64Bit joinTwo32Bit(Textblock32Bit first, Textblock32Bit second) {
+        byte[] new64Bit = new byte[NumberOfBytes.TEXTBLOCK64BIT.length];
+        new64Bit[0] = first.textblock32[0];
+        new64Bit[1] = first.textblock32[1];
+        new64Bit[2] = first.textblock32[2];
+        new64Bit[3] = first.textblock32[3];
+        new64Bit[4] = second.textblock32[0];
+        new64Bit[5] = second.textblock32[1];
+        new64Bit[6] = second.textblock32[2];
+        new64Bit[7] = second.textblock32[3];
+        return new TextBlock64Bit(new64Bit);
+    }
+
 }

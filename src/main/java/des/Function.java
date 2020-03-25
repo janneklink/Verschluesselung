@@ -3,7 +3,6 @@ package des;
 import java.util.ArrayList;
 
 
-
 public class Function {
 
     public static final ArrayList<SBox> sBoxes = new ArrayList<>() {
@@ -22,7 +21,7 @@ public class Function {
 
     public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, SubKey key) {
         Textblock48Bit expandedTextblock = textblock32Bit.expandTo48Bit();
-        Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr48ByteArray(expandedTextblock.textblock48, key.key));
+        Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr(expandedTextblock.textblock48, key.key, NumberOfBytes.TEXTBLOCK48BIT));
 
         return substitute(combinedTextblock);
     }
@@ -37,9 +36,9 @@ public class Function {
 
     private static byte[] collectTo8BitPackages(byte[] packages4Bit) {
         byte[] packages8Bit = new byte[packages4Bit.length / 2];
-        for (int byteN = 0; byteN < packages4Bit.length / 2; byteN++) {
-            byte first = packages4Bit[byteN * 2];
-            byte second = packages4Bit[byteN * 2 + 1];
+        for (int byteN = 0; byteN < packages4Bit.length; byteN += 2) {
+            byte first = packages4Bit[byteN];
+            byte second = packages4Bit[byteN + 1];
             packages8Bit[byteN] = joinTwo4BitTo8Bit(first, second);
         }
         return packages8Bit;
@@ -47,7 +46,7 @@ public class Function {
 
     private static byte joinTwo4BitTo8Bit(byte first, byte second) {
         first = (byte) (BitBlock.maskBits(first, BitMask.FIVETOEIGHTBIT) << 4);
-        second = (byte) BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT);
+        second = (byte) (BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT));
         return (byte) (first | second);
     }
 
@@ -59,12 +58,13 @@ public class Function {
         return substituted4Bits;
     }
 
-    public static byte[] exclusiveOr48ByteArray(byte[] array1, byte[] array2) {
-        byte[] combinedArrays = new byte[NumberOfBytes.TEXTBLOCK48BIT.length];
-        for (int byteN = 0; byteN < NumberOfBytes.TEXTBLOCK48BIT.length; byteN++) {
+    public static byte[] exclusiveOr(byte[] array1, byte[] array2, NumberOfBytes numberOfBytes) {
+        byte[] combinedArrays = new byte[numberOfBytes.length];
+        for (int byteN = 0; byteN < numberOfBytes.length; byteN++) {
             combinedArrays[byteN] = (byte) (array1[byteN] ^ array2[byteN]);
         }
         return combinedArrays;
     }
+
 
 }

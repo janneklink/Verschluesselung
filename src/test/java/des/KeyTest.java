@@ -17,7 +17,7 @@ public class KeyTest {
         Arrays.fill(subKeyBytes, (byte) 255);
         SubKey testSubKey = new SubKey(subKeyBytes);
         for (int i = 0; i < 16; i++) {
-            Assertions.assertArrayEquals(subKeys.get(i).key, testSubKey.key);
+            Assertions.assertArrayEquals(testSubKey.key,subKeys.get(i).key);
         }
 
     }
