@@ -1,76 +1,46 @@
 package des;
 
+import java.util.List;
+
 public class Textblock32Bit extends BitBlock {
     final byte[] textblock32;
+    List<List<Integer>> textExpansion;
+    List<List<Integer>> textPermutation;
 
     public Textblock32Bit(byte[] textblock) {
         checkSize(NumberOfBytes.TEXTBLOCK32BIT.length, textblock.length);
         this.textblock32 = textblock;
+        initializeTextExpansion();
+        initializeTextPermutation();
     }
 
-    /*
-     * In the context of expanding the 32Bit to 48Bit according to the table on DES on wikpedia,
-     * facing complexity issues
-     * I decided for hard-coding each byte of the 48Bit
-     * to achieve managable complexity, while coding
-     * accepting less comprehensebility
-     */
+    private void initializeTextExpansion() {
+        List<Integer> byte0 = List.of(31, 1, 2, 3, 4, 5, 4, 5);
+        List<Integer> byte1 = List.of(6, 7, 8, 9, 8, 9, 10, 11);
+        List<Integer> byte2 = List.of(12, 13, 12, 13, 14, 15, 16, 17);
+        List<Integer> byte3 = List.of(16, 17, 18, 19, 20, 21, 20, 21);
+        List<Integer> byte4 = List.of(22, 23, 24, 25, 24, 25, 26, 27);
+        List<Integer> byte5 = List.of(28, 29, 28, 29, 30, 31, 32, 1);
+        textExpansion = List.of(byte0, byte1, byte2, byte3, byte4, byte5);
+    }
+
+    private void initializeTextPermutation() {
+        List<Integer> byte0 = List.of(16, 7, 20, 21, 29, 12, 28, 17);
+        List<Integer> byte1 = List.of(1, 15, 23, 26, 5, 18, 31, 10);
+        List<Integer> byte2 = List.of(2, 8, 24, 14, 32, 27, 3, 9);
+        List<Integer> byte3 = List.of(19, 13, 30, 6, 22, 11, 4, 25);
+        textPermutation = List.of(byte0, byte1, byte2, byte3);
+    }
+
 
     public Textblock48Bit expandTo48Bit() {
-        byte[] fortyEightBit = new byte[NumberOfBytes.TEXTBLOCK48BIT.length];
-        fortyEightBit[0] = getByte0();
-        fortyEightBit[1] = getByte1();
-        fortyEightBit[2] = getByte2();
-        fortyEightBit[3] = getByte3();
-        fortyEightBit[4] = getByte4();
-        fortyEightBit[5] = getByte5();
-        return new Textblock48Bit(fortyEightBit);
+        byte[] expandenBytes = extractNewBytes(textblock32, NumberOfBytes.TEXTBLOCK48BIT, textExpansion);
+        return new Textblock48Bit(expandenBytes);
     }
 
-
-    private byte getByte0() {
-        byte digit1 = (byte) (maskBits(textblock32[3], BitMask.LASTBIT) << 7);
-        byte digit2To6 = (byte) (maskBits(textblock32[0], BitMask.FIRSTTOFIVEBIT) >> 1);
-        byte digit7and8 = (byte) (maskBits(textblock32[0], BitMask.FOURANDFIVEBIT) >> 3);
-        return (byte) (digit1 | digit2To6 | digit7and8);
+    public Textblock32Bit getPermutation() {
+        byte[] permutatedText = extractNewBytes(textblock32, NumberOfBytes.TEXTBLOCK32BIT, textPermutation);
+        return new Textblock32Bit(permutatedText);
     }
-
-    private byte getByte1() {
-        byte digit1To3 = (byte) (maskBits(textblock32[0], BitMask.LASTTHREEBIT) << 5);
-        byte digit4 = (byte) (maskBits(textblock32[1], BitMask.FIRSTBIT) >> 3);
-        byte digit5 = (byte) (maskBits(textblock32[0], BitMask.LASTBIT) << 3);
-        byte digit6To8 = (byte) (maskBits(textblock32[1], BitMask.FIRSTTOTHREEBIT) >> 5);
-        return (byte) (digit1To3 | digit4 | digit5 | digit6To8);
-    }
-
-    private byte getByte2() {
-        byte digit1and2 = (byte) (maskBits(textblock32[1], BitMask.FOURANDFIVEBIT) << 3);
-        byte digit3To7 = (byte) (maskBits(textblock32[1], BitMask.FOURTOEIGHTBIT) << 1);
-        byte digit8 = (byte) (maskBits(textblock32[2], BitMask.FIRSTBIT) >> 7);
-        return (byte) (digit1and2 | digit3To7 | digit8);
-    }
-
-    private byte getByte3() {
-        byte digit1 = (byte) (maskBits(textblock32[1], BitMask.LASTBIT) << 7);
-        byte digit2To6 = (byte) (maskBits(textblock32[2], BitMask.FIRSTTOFIVEBIT) >> 1);
-        byte digit7and8 = (byte) (maskBits(textblock32[2], BitMask.FOURANDFIVEBIT) >> 3);
-        return (byte) (digit1 | digit2To6 | digit7and8);
-    }
-
-    private byte getByte4() {
-        byte digit1To3 = (byte) (maskBits(textblock32[2], BitMask.LASTTHREEBIT) << 5);
-        byte digit4 = (byte) (maskBits(textblock32[3], BitMask.FIRSTBIT) >> 3);
-        byte digit5 = (byte) (maskBits(textblock32[2], BitMask.LASTBIT) << 3);
-        byte digit6To8 = (byte) (maskBits(textblock32[3], BitMask.FIRSTTOTHREEBIT) >> 5);
-        return (byte) (digit1To3 | digit4 | digit5 | digit6To8);
-    }
-
-    private byte getByte5() {
-        byte digit1and2 = (byte) (maskBits(textblock32[3], BitMask.FOURANDFIVEBIT) << 3);
-        byte digit3To7 = (byte) (maskBits(textblock32[3], BitMask.FOURTOEIGHTBIT) << 1);
-        byte digit8 = (byte) (maskBits(textblock32[0], BitMask.FIRSTBIT) >> 7);
-        return (byte) (digit1and2 | digit3To7 | digit8);
-    }
-
 
 }

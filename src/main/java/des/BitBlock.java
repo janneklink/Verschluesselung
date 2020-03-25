@@ -1,5 +1,7 @@
 package des;
 
+import java.util.List;
+
 public class BitBlock {
 
     protected void checkSize(int value, int expected) {
@@ -8,8 +10,25 @@ public class BitBlock {
         }
     }
 
-    public static byte maskBits(byte input, BitMask mask) {
-        return (byte) (input & mask.mask);
+    protected byte[] extractNewBytes(byte[] oldBytes, NumberOfBytes numberOfBytes, List<List<Integer>> permutation) {
+        byte[] newBytes = new byte[numberOfBytes.length];
+        for (int byteNumber = 0; byteNumber < numberOfBytes.length; byteNumber++) {
+            newBytes[byteNumber] = getByte(byteNumber, oldBytes, permutation);
+        }
+        return newBytes;
+    }
+
+    protected byte getByte(int bytenumber, byte[] bytes, List<List<Integer>> permutation) {
+        byte result = 0b00000000;
+        int numberOfBits = 8;
+        if (bytenumber == 3) {
+            numberOfBits = 4;
+        }
+        for (int bit = 0; bit < numberOfBits; bit++) {
+            int bitnumber = permutation.get(bytenumber).get(bit);
+            result = (byte) ((result << 1) | getNthBit(bytes, bitnumber));
+        }
+        return result;
     }
 
     protected byte getNthBit(byte[] bytes, int n) {
@@ -39,5 +58,9 @@ public class BitBlock {
                 return BitMask.LASTBIT;
         }
         return BitMask.EMPTY;
+    }
+
+    public static byte maskBits(byte input, BitMask mask) {
+        return (byte) (input & mask.mask);
     }
 }

@@ -19,4 +19,5 @@ public class TextBlock64Bit extends BitBlock {
         byte[] rBlock = Arrays.copyOfRange(textblock64, NumberOfBytes.TEXTBLOCK32BIT.length, 2 * NumberOfBytes.TEXTBLOCK32BIT.length);
         return new Textblock32Bit(rBlock);
     }
+
 }

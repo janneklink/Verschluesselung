@@ -13,10 +13,12 @@ public class KeyTest {
         Arrays.fill(keyBytes, (byte) 255);
         Key key = new Key(keyBytes);
         ArrayList<SubKey> subKeys = key.createSubKeys();
-        System.out.println(Integer.toBinaryString(subKeys.get(1).key[0]));
         byte[] subKeyBytes = new byte[6];
-        Arrays.fill(keyBytes, (byte) 255);
+        Arrays.fill(subKeyBytes, (byte) 255);
         SubKey testSubKey = new SubKey(subKeyBytes);
-        Assertions.assertArrayEquals(subKeys.get(0).key, testSubKey.key);
+        for (int i = 0; i < 16; i++) {
+            Assertions.assertArrayEquals(subKeys.get(i).key, testSubKey.key);
+        }
+
     }
 }

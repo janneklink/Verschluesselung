@@ -17,7 +17,7 @@ public class SBox extends BitBlock {
 
     public static byte getBoundsOfSix(byte sixBitInput) {
         byte rightBound = (maskBits(sixBitInput, BitMask.LASTBIT));
-        byte leftBoundShifted = (byte) (maskBits(sixBitInput, BitMask.LEFTBOUNDOFSIX) >> 4);
+        byte leftBoundShifted = (byte) (maskBits(sixBitInput, BitMask.THIRDBIT) >> 4);
         return (byte) (rightBound | leftBoundShifted);
     }
 

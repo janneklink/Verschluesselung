@@ -49,34 +49,14 @@ class HalfKey extends BitBlock {
     List<List<Integer>> keyPermutation;
     byte[] halfKey;
 
-    protected byte getByte(int bytenumber, byte[] key, List<List<Integer>> permutation) {
-        byte result = 0b00000000;
-        int numberOfBits = 8;
-        if (bytenumber == 3) {
-            numberOfBits = 4;
-        }
-        for (int bit = 0; bit < numberOfBits; bit++) {
-            int bitnumber = permutation.get(bytenumber).get(bit);
-            result = (byte) ((result << 1) | getNthBit(key, bitnumber));
-        }
-        return result;
-    }
 
     public byte[] getHalfKey(byte[] key) {
-        byte[] halfKey = new byte[4];
-        halfKey[0] = getByte(0, key, keyCreationBitPermutation);
-        halfKey[1] = getByte(1, key, keyCreationBitPermutation);
-        halfKey[2] = getByte(2, key, keyCreationBitPermutation);
-        halfKey[3] = getByte(3, key, keyCreationBitPermutation);
+        byte[] halfKey = extractNewBytes(key, NumberOfBytes.HALFKEY, keyCreationBitPermutation);
         return halfKey;
     }
 
     public byte[] getPermutatedHalfKey() {
-        byte[] permutatedHalfKey = new byte[3];
-        permutatedHalfKey[0] = getByte(0, halfKey, keyPermutation);
-        System.out.println(Integer.toBinaryString(permutatedHalfKey[0]));
-        permutatedHalfKey[1] = getByte(1, halfKey, keyPermutation);
-        permutatedHalfKey[2] = getByte(2, halfKey, keyPermutation);
+        byte[] permutatedHalfKey = extractNewBytes(halfKey, NumberOfBytes.PERMUTATEDHALFKEY, keyPermutation);
         return permutatedHalfKey;
     }
 
@@ -105,7 +85,7 @@ class LeftKey extends HalfKey {
         initializeCreationBitPermutation();
         initializeBitPermutation();
         this.halfKey = getHalfKey(key);
-        System.out.println(Integer.toBinaryString(getNthBit(halfKey,3)));
+
     }
 
     private void initializeCreationBitPermutation() {
