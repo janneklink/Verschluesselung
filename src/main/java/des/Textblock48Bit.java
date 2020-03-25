@@ -39,7 +39,7 @@ public class Textblock48Bit extends BitBlock {
     }
 
     private byte getPackage3() {
-        byte digits1To6 = (maskBits(textblock48[2], BitMask.THREETOEIGHTBIT));
+        byte digits1To6 = (byte)(maskBits(textblock48[2], BitMask.THREETOEIGHTBIT));
         return digits1To6;
     }
 
@@ -61,7 +61,7 @@ public class Textblock48Bit extends BitBlock {
     }
 
     private byte getPackage7() {
-        byte digits1To6 = (maskBits(textblock48[5], BitMask.THREETOEIGHTBIT));
+        byte digits1To6 = (byte)(maskBits(textblock48[5], BitMask.THREETOEIGHTBIT));
         return digits1To6;
     }
 }

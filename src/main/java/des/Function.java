@@ -47,7 +47,7 @@ public class Function {
 
     private static byte joinTwo4BitTo8Bit(byte first, byte second) {
         first = (byte) (BitBlock.maskBits(first, BitMask.FIVETOEIGHTBIT) << 4);
-        second = BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT);
+        second = (byte) BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT);
         return (byte) (first | second);
     }
 
