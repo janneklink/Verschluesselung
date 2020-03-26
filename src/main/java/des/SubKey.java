@@ -1,5 +1,7 @@
 package des;
 
+import java.util.Arrays;
+
 public class SubKey extends BitBlock {
     final byte[] key;
 
@@ -8,4 +10,8 @@ public class SubKey extends BitBlock {
         this.key = key;
     }
 
+    @Override
+    public String toString() {
+        return toString(key);
+    }
 }

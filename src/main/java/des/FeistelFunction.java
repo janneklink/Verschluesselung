@@ -3,7 +3,7 @@ package des;
 import java.util.ArrayList;
 
 
-public class Function {
+public class FeistelFunction {
 
     public static final ArrayList<SBox> sBoxes = new ArrayList<>() {
         {
@@ -22,8 +22,8 @@ public class Function {
     public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, SubKey key) {
         Textblock48Bit expandedTextblock = textblock32Bit.expandTo48Bit();
         Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr(expandedTextblock.textblock48, key.key, NumberOfBytes.TEXTBLOCK48BIT));
-
-        return substitute(combinedTextblock);
+        Textblock32Bit substitutedTextblock = substitute(combinedTextblock);
+        return substitutedTextblock.getPermutation();
     }
 
     private static Textblock32Bit substitute(Textblock48Bit combinedTextblock) {
@@ -39,7 +39,7 @@ public class Function {
         for (int byteN = 0; byteN < packages4Bit.length; byteN += 2) {
             byte first = packages4Bit[byteN];
             byte second = packages4Bit[byteN + 1];
-            packages8Bit[byteN] = joinTwo4BitTo8Bit(first, second);
+            packages8Bit[byteN/2] = joinTwo4BitTo8Bit(first, second);
         }
         return packages8Bit;
     }

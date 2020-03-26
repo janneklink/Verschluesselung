@@ -37,8 +37,8 @@ public class BitBlock {
         int numberOfBits = 8;
         for (int index = 0; index < numberOfBits; index++) {
             int bitnumber = permutation.get(bytenumber).get(index);
-            result=(byte)(result<<1);
-            result = (byte) (result| getNthBit(bytes, bitnumber));
+            result = (byte) (result << 1);
+            result = (byte) (result | getNthBit(bytes, bitnumber));
         }
         return result;
     }
@@ -78,5 +78,13 @@ public class BitBlock {
 
     public static int maskBits(byte input, BitMask mask) {
         return (input & mask.mask);
+    }
+
+    public String toString(byte[] bytes) {
+        String bytestring = "";
+        for (byte aByte : bytes) {
+            bytestring += Integer.toBinaryString(aByte);
+        }
+        return bytestring;
     }
 }
