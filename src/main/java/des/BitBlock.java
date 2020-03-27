@@ -27,30 +27,30 @@ public class BitBlock {
         int numberOfBitsInHalfByte = 4;
         for (int index = 0; index < numberOfBitsInHalfByte; index++) {
             int bitnumber = permutation.get(bytenumber).get(index);
-            result = (byte) ((result << 1) | getNthBit(bytes, bitnumber));
+            result = int2byte ((result << 1) | getNthBit(bytes, bitnumber));
         }
         return result;
     }
 
     protected byte getByte(int bytenumber, byte[] bytes, List<List<Integer>> permutation) {
-        byte result = 0b00000000;
+        int result = 0b00000000;
         int numberOfBits = 8;
         for (int index = 0; index < numberOfBits; index++) {
             int bitnumber = permutation.get(bytenumber).get(index);
-            result = (byte) (result << 1);
-            result = (byte) (result | getNthBit(bytes, bitnumber));
+            result = (result << 1);
+            result = (result | getNthBit(bytes, bitnumber));
         }
-        return result;
+        return int2byte(result);
     }
 
-    protected static byte getNthBit(byte[] bytes, int n) {
+    protected static int getNthBit(byte[] bytes, int n) {
         int bytenumber = (n - 1) / 8;
         int bitnumber = (n - 1) % 8;
         BitMask bitMask = getSingleBitMask(bitnumber);
-        if (maskBits(bytes[bytenumber], bitMask) != 0) {
-            return (byte) 1;
+        if (maskBits(bytes[bytenumber], bitMask) == 0) {
+            return 0;
         } else {
-            return (byte) 0;
+            return 1;
         }
     }
 
@@ -77,7 +77,11 @@ public class BitBlock {
     }
 
     public static int maskBits(byte input, BitMask mask) {
-        return (input & mask.mask);
+        return mask.and(input);
+    }
+
+    public static byte int2byte(int input) {
+        return input<= 127 ? (byte) input : (byte)(127-input);
     }
 
     public String toString(byte[] bytes) {

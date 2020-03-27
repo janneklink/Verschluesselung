@@ -16,16 +16,13 @@ public class SBox extends BitBlock {
     }
 
     public static byte getBoundsOfSix(byte sixBitInput) {
-        byte rightBound = (byte)(maskBits(sixBitInput, BitMask.LASTBIT));
-        byte leftBoundShifted = (byte)0 ;
-        if((maskBits(sixBitInput, BitMask.THIRDBIT))!=0){
-            leftBoundShifted = (byte)(0b10);
-        }
-        return (byte) (rightBound | leftBoundShifted);
+        int rightBound = (maskBits(sixBitInput, BitMask.LASTBIT));
+        int leftBoundShifted = maskBits(sixBitInput, BitMask.THIRDBIT) >> 4;
+        return int2byte(rightBound | leftBoundShifted);
     }
 
     public static byte getMiddleOfSix(byte sixBitInput) {
-        return (byte) (maskBits(sixBitInput, BitMask.FOURTOSEVENBIT) >> 1);
+        return int2byte(maskBits(sixBitInput, BitMask.FOURTOSEVENBIT) >> 1);
     }
 
     public static final byte[][] s1box = new byte[][]{

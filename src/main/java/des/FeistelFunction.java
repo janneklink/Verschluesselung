@@ -39,15 +39,15 @@ public class FeistelFunction {
         for (int byteN = 0; byteN < packages4Bit.length; byteN += 2) {
             byte first = packages4Bit[byteN];
             byte second = packages4Bit[byteN + 1];
-            packages8Bit[byteN/2] = joinTwo4BitTo8Bit(first, second);
+            packages8Bit[byteN / 2] = joinTwo4BitTo8Bit(first, second);
         }
         return packages8Bit;
     }
 
     private static byte joinTwo4BitTo8Bit(byte first, byte second) {
-        first = (byte) (BitBlock.maskBits(first, BitMask.FIVETOEIGHTBIT) << 4);
-        second = (byte) (BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT));
-        return (byte) (first | second);
+        int firstHalf = BitBlock.maskBits(first, BitMask.FIVETOEIGHTBIT) << 4;
+        int secondHalf = BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT);
+        return BitBlock.int2byte((firstHalf | secondHalf));
     }
 
     private static byte[] substituteWithSBox(byte[] packages6Bit) {
@@ -61,7 +61,7 @@ public class FeistelFunction {
     public static byte[] exclusiveOr(byte[] array1, byte[] array2, NumberOfBytes numberOfBytes) {
         byte[] combinedArrays = new byte[numberOfBytes.length];
         for (int byteN = 0; byteN < numberOfBytes.length; byteN++) {
-            combinedArrays[byteN] = (byte) (array1[byteN] ^ array2[byteN]);
+            combinedArrays[byteN] = BitBlock.int2byte(array1[byteN] ^ array2[byteN]);
         }
         return combinedArrays;
     }

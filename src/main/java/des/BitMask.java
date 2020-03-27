@@ -18,10 +18,15 @@ public enum BitMask {
     FIRSTANDSECONDBIT(0b11000000),
     THREETOEIGHTBIT(0b00111111);
 
-    byte mask;
+    int mask;
 
     BitMask(int mask) {
-        this.mask = (byte) mask;
+        this.mask = mask;
+    }
+
+    int and(byte toMask) {
+        int intToMask = toMask >= 0 ? (int) toMask : 127 - (toMask);
+        return (mask & intToMask);
     }
 
 }

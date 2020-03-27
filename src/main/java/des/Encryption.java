@@ -14,11 +14,13 @@ public class Encryption {
         Textblock32Bit newRBlock = rBlock;
 
         for (SubKey subkey : subKeys) {
-            lBlock = newLBlock;
-            rBlock = newRBlock;
+
             Textblock32Bit resultFFunction = FeistelFunction.fFunction(lBlock, subkey);
             newLBlock = new Textblock32Bit(FeistelFunction.exclusiveOr(resultFFunction.textblock32, rBlock.textblock32, NumberOfBytes.TEXTBLOCK32BIT));
             newRBlock = lBlock;
+
+            lBlock = newLBlock;
+            rBlock = newRBlock;
         }
         TextBlock64Bit encryptedText = TextBlock64Bit.joinTwo32Bit(lBlock, rBlock).getFinalPermutation();
         return encryptedText;

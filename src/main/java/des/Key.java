@@ -1,7 +1,6 @@
 package des;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Key extends BitBlock {
@@ -48,6 +47,7 @@ public class Key extends BitBlock {
 abstract class HalfKey extends BitBlock {
     List<List<Integer>> keyCreationBitPermutation;
     List<List<Integer>> keyPermutation;
+    List<List<Integer>> keyRotation;
     byte[] halfKey;
 
     public HalfKey(byte[] key) {
@@ -55,6 +55,7 @@ abstract class HalfKey extends BitBlock {
 
         initializeCreationBitPermutation();
         initializeBitPermutation();
+        initializeRotation();
         this.halfKey = getHalfKey(key);
     }
 
@@ -63,8 +64,8 @@ abstract class HalfKey extends BitBlock {
     protected abstract void initializeCreationBitPermutation();
 
     public byte[] getHalfKey(byte[] key) {
-        byte[] halfKey = extractNewBytes(key, NumberOfBytes.HALFKEY, keyCreationBitPermutation);
-        return halfKey;
+        byte[] halfKeyBytes = extractNewBytes(key, NumberOfBytes.HALFKEY, keyCreationBitPermutation);
+        return halfKeyBytes;
     }
 
     public byte[] getPermutatedHalfKey() {
@@ -80,17 +81,21 @@ abstract class HalfKey extends BitBlock {
     }
 
     protected byte[] getRotatedHalfKey() {
-        byte[] rotatedKey = new byte[4];
-        rotatedKey[0] = (byte) ((halfKey[0] << 1) | (maskBits(halfKey[1], BitMask.FIRSTBIT) >> 7));
-        rotatedKey[1] = (byte) ((halfKey[1] << 1) | (maskBits(halfKey[2], BitMask.FIRSTBIT) >> 7));
-        rotatedKey[2] = (byte) ((halfKey[2] << 1) | (maskBits(halfKey[3], BitMask.FIFTHBIT) >> 3));
-        rotatedKey[3] = (byte) (maskBits((byte) (halfKey[3] << 1), BitMask.FIVETOEIGHTBIT) | (maskBits(halfKey[0], BitMask.FIRSTBIT) >> 7));
-        return rotatedKey;
+        byte[] rotatedHalfKey = extractNewBytes(halfKey, NumberOfBytes.HALFKEY, keyRotation);
+        return rotatedHalfKey;
     }
 
     @Override
     public String toString() {
         return super.toString(halfKey);
+    }
+
+    public void initializeRotation() {
+        List<Integer> byte0 = List.of(2, 3, 4, 5, 6, 7, 8, 9);
+        List<Integer> byte1 = List.of(10, 11, 12, 13, 14, 15, 16, 17);
+        List<Integer> byte2 = List.of(18, 19, 20, 21, 22, 23, 24, 29);
+        List<Integer> byte3 = List.of(30, 31, 32, 1);
+        this.keyRotation = List.of(byte0, byte1, byte2, byte3);
     }
 }
 

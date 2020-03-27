@@ -22,46 +22,46 @@ public class Textblock48Bit extends BitBlock {
     }
 
     private byte getPackage0() {
-        byte digits1To6 = (byte) (maskBits(textblock48[0], BitMask.FIRSTTOSIXBIT) >> 2);
-        return digits1To6;
+        int digits1To6 = (maskBits(textblock48[0], BitMask.FIRSTTOSIXBIT) >> 2);
+        return int2byte(digits1To6);
     }
 
     private byte getPackage1() {
-        byte digits1and2 = (byte) (maskBits(textblock48[0], BitMask.SEVENANDEIGHTBIT) << 4);
-        byte digit3To6 = (byte) (maskBits(textblock48[1], BitMask.FIRSTTOFOURBIT) >> 4);
-        return (byte) (digits1and2 | digit3To6);
+        int digits1and2 = (maskBits(textblock48[0], BitMask.SEVENANDEIGHTBIT) << 4);
+        int digit3To6 = (maskBits(textblock48[1], BitMask.FIRSTTOFOURBIT) >> 4);
+        return int2byte(digits1and2 | digit3To6);
     }
 
     private byte getPackage2() {
-        byte digits1To4 = (byte) (maskBits(textblock48[1], BitMask.FIVETOEIGHTBIT) << 2);
-        byte digits5and6 = (byte) (maskBits(textblock48[2], BitMask.FIRSTANDSECONDBIT) >> 6);
-        return (byte) (digits1To4 | digits5and6);
+        int digits1To4 = (maskBits(textblock48[1], BitMask.FIVETOEIGHTBIT) << 2);
+        int digits5and6 = (maskBits(textblock48[2], BitMask.FIRSTANDSECONDBIT) >> 6);
+        return int2byte(digits1To4 | digits5and6);
     }
 
     private byte getPackage3() {
-        byte digits1To6 = (byte)(maskBits(textblock48[2], BitMask.THREETOEIGHTBIT));
-        return digits1To6;
+        int digits1To6 = (maskBits(textblock48[2], BitMask.THREETOEIGHTBIT));
+        return int2byte(digits1To6);
     }
 
     private byte getPackage4() {
-        byte digits1To6 = (byte) (maskBits(textblock48[3], BitMask.FIRSTTOSIXBIT) >> 2);
-        return digits1To6;
+        int digits1To6 = (maskBits(textblock48[3], BitMask.FIRSTTOSIXBIT) >> 2);
+        return int2byte(digits1To6);
     }
 
     private byte getPackage5() {
-        byte digits1and2 = (byte) (maskBits(textblock48[3], BitMask.SEVENANDEIGHTBIT) << 4);
-        byte digit3To6 = (byte) (maskBits(textblock48[4], BitMask.FIRSTTOFOURBIT) >> 4);
-        return (byte) (digits1and2 | digit3To6);
+        int digits1and2 = (maskBits(textblock48[3], BitMask.SEVENANDEIGHTBIT) << 4);
+        int digit3To6 = (maskBits(textblock48[4], BitMask.FIRSTTOFOURBIT) >> 4);
+        return int2byte(digits1and2 | digit3To6);
     }
 
     private byte getPackage6() {
-        byte digits1To4 = (byte) (maskBits(textblock48[4], BitMask.FIVETOEIGHTBIT) << 2);
-        byte digits5and6 = (byte) (maskBits(textblock48[5], BitMask.FIRSTANDSECONDBIT) >> 6);
-        return (byte) (digits1To4 | digits5and6);
+        int digits1To4 = (maskBits(textblock48[4], BitMask.FIVETOEIGHTBIT) << 2);
+        int digits5and6 = (maskBits(textblock48[5], BitMask.FIRSTANDSECONDBIT) >> 6);
+        return int2byte(digits1To4 | digits5and6);
     }
 
     private byte getPackage7() {
-        byte digits1To6 = (byte)(maskBits(textblock48[5], BitMask.THREETOEIGHTBIT));
-        return digits1To6;
+        int digits1To6 = (maskBits(textblock48[5], BitMask.THREETOEIGHTBIT));
+        return int2byte(digits1To6);
     }
 }
