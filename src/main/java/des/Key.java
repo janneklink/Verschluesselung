@@ -87,7 +87,7 @@ abstract class HalfKey extends BitBlock {
 
     @Override
     public String toString() {
-        return super.toString(halfKey);
+        return toString(halfKey);
     }
 
     public void initializeRotation() {

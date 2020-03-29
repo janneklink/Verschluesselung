@@ -12,8 +12,8 @@ public class EncryptionDecryptionProperty {
         TextBlock64Bit cleartext = new TextBlock64Bit(cleartextbytes);
         Key key = new Key(keybytes);
         TextBlock64Bit encryptedText = Encryption.encrypt(cleartext, key);
-        TextBlock64Bit decryptedText = Encryption.decrypt(encryptedText,key);
-        Assertions.assertArrayEquals(cleartext.textblock64,decryptedText.textblock64);
+        TextBlock64Bit decryptedText = Encryption.decrypt(encryptedText, key);
+        Assertions.assertArrayEquals(cleartext.textblock64, decryptedText.textblock64);
     }
 
     @Example

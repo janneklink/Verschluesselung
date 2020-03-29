@@ -4,6 +4,14 @@ import java.util.List;
 
 public class BitBlock {
 
+    public static byte[] ints2bytes(int... ints) {
+        byte[] result = new byte[ints.length];
+        for (int i = 0; i < ints.length; i++) {
+            result[i] = int2byte(ints[i]);
+        }
+        return result;
+    }
+
     protected void checkSize(int value, int expected) {
         if (value != expected) {
             throw new IllegalArgumentException();
@@ -27,7 +35,7 @@ public class BitBlock {
         int numberOfBitsInHalfByte = 4;
         for (int index = 0; index < numberOfBitsInHalfByte; index++) {
             int bitnumber = permutation.get(bytenumber).get(index);
-            result = int2byte ((result << 1) | getNthBit(bytes, bitnumber));
+            result = int2byte((result << 1) | getNthBit(bytes, bitnumber));
         }
         return result;
     }
@@ -81,10 +89,11 @@ public class BitBlock {
     }
 
     public static byte int2byte(int input) {
-        return input<= 127 ? (byte) input : (byte)(127-input);
+        return input <= 127 ? (byte) input : (byte) (127 - input);
     }
 
-    public String toString(byte[] bytes) {
+    public static String toString(byte[] bytes) {
+        // TODO: Do it right
         String bytestring = "";
         for (byte aByte : bytes) {
             bytestring += Integer.toBinaryString(aByte);

@@ -7,12 +7,13 @@ import java.util.Arrays;
 
 public class Textblock32BitTest {
     @Test
-    void testExpansion() {
+    void expandAllOnes() {
         byte[] byte32 = new byte[4];
-        Arrays.fill(byte32,(byte)255);
+        Arrays.fill(byte32, BitBlock.int2byte(0b11111111));
         Textblock32Bit textblock32Bit = new Textblock32Bit(byte32);
+
         byte[] byte48 = new byte[6];
-        Arrays.fill(byte48,(byte)255);
-        Assertions.assertArrayEquals(byte48,textblock32Bit.expandTo48Bit().textblock48);
+        Arrays.fill(byte48, BitBlock.int2byte(0b11111111));
+        Assertions.assertArrayEquals(byte48, textblock32Bit.expandTo48Bit().textblock48);
     }
 }

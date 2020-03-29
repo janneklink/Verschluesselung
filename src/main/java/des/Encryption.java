@@ -1,19 +1,23 @@
 package des;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Encryption {
     public static TextBlock64Bit encrypt(TextBlock64Bit cleartext, Key key) {
-        TextBlock64Bit initialTextPermutation = cleartext.getInitialPermutation();//tested and working
-        ArrayList<SubKey> subKeys = key.createSubKeys();
-
+        TextBlock64Bit initialTextPermutation = cleartext.getInitialPermutation();
+        List<SubKey> subKeys = key.createSubKeys();
         Textblock32Bit lBlock = initialTextPermutation.getLBlock();
         Textblock32Bit rBlock = initialTextPermutation.getRBlock();
 
-        Textblock32Bit newLBlock = lBlock;
-        Textblock32Bit newRBlock = rBlock;
+        return applySubkeys(subKeys, lBlock, rBlock);
+    }
 
+    private static TextBlock64Bit applySubkeys(List<SubKey> subKeys, Textblock32Bit lBlock, Textblock32Bit rBlock) {
         for (SubKey subkey : subKeys) {
+            Textblock32Bit newLBlock;
+            Textblock32Bit newRBlock;
 
             Textblock32Bit resultFFunction = FeistelFunction.fFunction(lBlock, subkey);
             newLBlock = new Textblock32Bit(FeistelFunction.exclusiveOr(resultFFunction.textblock32, rBlock.textblock32, NumberOfBytes.TEXTBLOCK32BIT));
@@ -22,24 +26,18 @@ public class Encryption {
             lBlock = newLBlock;
             rBlock = newRBlock;
         }
-        TextBlock64Bit encryptedText = TextBlock64Bit.joinTwo32Bit(lBlock, rBlock).getFinalPermutation();
-        return encryptedText;
+        return TextBlock64Bit.joinTwo32Bit(lBlock, rBlock).getFinalPermutation();
     }
 
     public static TextBlock64Bit decrypt(TextBlock64Bit encryptedText, Key key) {
         TextBlock64Bit initialTextPermutation = encryptedText.getInitialPermutation();
-        ArrayList<SubKey> subKeys = key.createSubKeys();
+        List<SubKey> subKeys = key.createSubKeys();
         Textblock32Bit lBlock = initialTextPermutation.getLBlock();
         Textblock32Bit rBlock = initialTextPermutation.getRBlock();
-        for (int index = subKeys.size() - 1; index >= 0; index--) {
-            SubKey subKey = subKeys.get(index);
-            Textblock32Bit resultFFunction = FeistelFunction.fFunction(lBlock, subKey);
-            Textblock32Bit newLBlock = new Textblock32Bit(FeistelFunction.exclusiveOr(resultFFunction.textblock32, rBlock.textblock32, NumberOfBytes.TEXTBLOCK32BIT));
-            Textblock32Bit newRBlock = lBlock;
-            lBlock = newLBlock;
-            rBlock = newRBlock;
-        }
-        TextBlock64Bit decryptedText = TextBlock64Bit.joinTwo32Bit(lBlock, rBlock).getFinalPermutation();
-        return decryptedText;
+
+        List<SubKey> revertedSubkeys = new ArrayList<>(subKeys);
+        Collections.reverse(revertedSubkeys);
+
+        return applySubkeys(revertedSubkeys, lBlock, rBlock);
     }
 }
