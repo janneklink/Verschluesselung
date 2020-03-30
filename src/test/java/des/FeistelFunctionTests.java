@@ -34,4 +34,13 @@ public class FeistelFunctionTests {
         String message = String.format("Expected: %s%nActual: %s", BitBlock.toString(expectedTextblock.textblock32), BitBlock.toString(textblock32Bit.textblock32));
         Assertions.assertArrayEquals(expectedTextblock.textblock32, textblock32Bit.textblock32, message);
     }
+
+    @Example
+    void joinTwo4BitTo8Bit() {
+        byte first = 0b00001101;
+        byte second = 0b00001001;
+        byte expected = BitBlock.int2byte(0b11011001);
+        byte joined = FeistelFunction.joinTwo4BitTo8Bit(first, second);
+        Assertions.assertEquals(expected, joined);
+    }
 }

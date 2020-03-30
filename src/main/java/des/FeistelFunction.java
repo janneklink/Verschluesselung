@@ -20,6 +20,8 @@ public class FeistelFunction {
 
 
     public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, SubKey key) {
+//        byte[] exclusiveOr = exclusiveOr(textblock32Bit.textblock32,key.key,NumberOfBytes.TEXTBLOCK32BIT);
+//        return new Textblock32Bit(exclusiveOr);
         Textblock48Bit expandedTextblock = textblock32Bit.expandTo48Bit();
         Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr(expandedTextblock.textblock48, key.key, NumberOfBytes.TEXTBLOCK48BIT));
         Textblock32Bit substitutedTextblock = substitute(combinedTextblock);
@@ -44,7 +46,7 @@ public class FeistelFunction {
         return packages8Bit;
     }
 
-    private static byte joinTwo4BitTo8Bit(byte first, byte second) {
+    public static byte joinTwo4BitTo8Bit(byte first, byte second) {
         int firstHalf = BitBlock.maskBits(first, BitMask.FIVETOEIGHTBIT) << 4;
         int secondHalf = BitBlock.maskBits(second, BitMask.FIVETOEIGHTBIT);
         return BitBlock.int2byte((firstHalf | secondHalf));

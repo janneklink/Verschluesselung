@@ -16,8 +16,8 @@ public class Key extends BitBlock {
 
     public ArrayList<SubKey> createSubKeys() {
         ArrayList<SubKey> SubKeys = new ArrayList<>();
-        LeftKey leftHalfKey = new LeftKey(key);
-        RightKey rightHalfKey = new RightKey(key);
+        LeftKey leftHalfKey = new LeftKey(key.clone());
+        RightKey rightHalfKey = new RightKey(key.clone());
         for (int round = 0; round < numberOfSubKeys; round++) {
             int numberOfRotations = rotations.get(round);
             leftHalfKey.rotate(numberOfRotations);
