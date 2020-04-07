@@ -34,9 +34,18 @@ public class EncryptionDecryptionProperty {
     }
 
     @Example
-    void failingExample() throws Exception {
+    void simpleExample() throws Exception {
         byte[] cleartext = new byte[8];
         byte[] key = new byte[8];
+        encryptionAndDecryption(cleartext, key);
+    }
+
+    @Example
+    void anotherSimpleExample() throws Exception {
+        byte[] cleartext = new byte[]{1, 2, 3, 4, 5, 6, 7, 8};
+        byte[] key = new byte[]{
+                0, 0, 0, 0, -128, -128, -128, -128
+        };
         encryptionAndDecryption(cleartext, key);
     }
 }

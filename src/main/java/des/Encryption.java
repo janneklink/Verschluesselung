@@ -26,8 +26,6 @@ public class Encryption {
 
             lBlock = newLBlock;
             rBlock = newRBlock;
-
-
         }
         return TextBlock64Bit.joinTwo32Bit(rBlock, lBlock);
     }
