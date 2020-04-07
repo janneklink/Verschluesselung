@@ -40,4 +40,18 @@ public class Textblock64BitTest {
         System.arraycopy(right, 0, expected, 4, 4);
         Assertions.assertArrayEquals(expected, textBlock64Bit.textblock64);
     }
+
+    @Property
+    void splitInLandR(
+            @ForAll @Size(4) byte[] left,
+            @ForAll @Size(4) byte[] right
+    ) {
+        TextBlock64Bit joined = TextBlock64Bit.joinTwo32Bit(new Textblock32Bit(left), new Textblock32Bit(right));
+
+        Textblock32Bit lblock = joined.getLBlock();
+        Textblock32Bit rBlock = joined.getRBlock();
+
+        Assertions.assertArrayEquals(left, lblock.textblock32);
+        Assertions.assertArrayEquals(right, rBlock.textblock32);
+    }
 }

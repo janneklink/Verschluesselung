@@ -20,8 +20,6 @@ public class FeistelFunction {
 
 
     public static Textblock32Bit fFunction(Textblock32Bit textblock32Bit, SubKey key) {
-//        byte[] exclusiveOr = exclusiveOr(textblock32Bit.textblock32,key.key,NumberOfBytes.TEXTBLOCK32BIT);
-//        return new Textblock32Bit(exclusiveOr);
         Textblock48Bit expandedTextblock = textblock32Bit.expandTo48Bit();
         Textblock48Bit combinedTextblock = new Textblock48Bit(exclusiveOr(expandedTextblock.textblock48, key.key, NumberOfBytes.TEXTBLOCK48BIT));
         Textblock32Bit substitutedTextblock = substitute(combinedTextblock);
