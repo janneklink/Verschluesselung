@@ -1,5 +1,6 @@
 package des;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +28,7 @@ public class TextEncryption {
 
 
     public static List<byte[]> get64BitBlocks(String string) {
-        byte[] stringBytes = string.getBytes();
+        byte[] stringBytes = string.getBytes(StandardCharsets.UTF_8);
         int numberOfBytes = Math.floorDiv(stringBytes.length - 1, 8) + 1;
         List<byte[]> textblocks64Bit = new ArrayList<>();
         for (int index = 0; index < numberOfBytes - 1; index++) {
@@ -64,7 +65,7 @@ public class TextEncryption {
         for (int textBlockIndex = 0; textBlockIndex < encryptedTextBlocks.size(); textBlockIndex++) {
             System.arraycopy(encryptedTextBlocks.get(textBlockIndex), 0, stringBytes, textBlockIndex * 8, 8);
         }
-        return new String(stringBytes);
+        return new String(stringBytes,StandardCharsets.UTF_8);
     }
 
 
