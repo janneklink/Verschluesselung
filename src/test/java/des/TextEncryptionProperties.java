@@ -21,8 +21,8 @@ public class TextEncryptionProperties {
     @Property
     void textEnAndDeCryption(@ForAll @AlphaChars @NumericChars @NotEmpty String cleartext,@ForAll @Size(value = 8) byte[] keybytes){
         Key key = new Key(keybytes);
-        String encrypted = TextEncryption.encryptText(cleartext, key);
-        String decrypted = TextEncryption.decryptText(encrypted, key);
+        String encryptedText = TextEncryption.encryptText(cleartext, key);
+        String decrypted = TextEncryption.decryptText(encryptedText, key);
         Assertions.assertEquals(cleartext,decrypted);
     }
 }
